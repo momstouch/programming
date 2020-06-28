@@ -27,6 +27,19 @@ def solution2(heights):
     return answer
 
 
+def solution3(heights): # using stack
+    answer = [0]*len(heights)
+    stack = []
+
+    for i in reversed(range(len(heights))):
+        while stack and stack[-1][1] < heights[i]:
+            idx, height = stack.pop()
+            answer[idx] = i+1
+        stack.append((i, heights[i]))
+
+    return answer
+
+
 cases = [
         [6, 9, 5, 7, 4],        # [0,0,2,2,4]
         [3, 9, 9, 3, 5, 7, 2],  # [0,0,0,3,3,3,6]
@@ -45,6 +58,14 @@ for case in cases:
 
     start = time.time()
     print(solution2(case))
+    end = time.time()
+    print(msg.format(
+        func = solution2.__name__,
+        time = end - start
+        ))
+
+    start = time.time()
+    print(solution3(case))
     end = time.time()
     print(msg.format(
         func = solution2.__name__,
