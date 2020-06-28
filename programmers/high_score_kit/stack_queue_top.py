@@ -28,13 +28,13 @@ def solution2(heights):
 
 
 def solution3(heights): # using stack
-    answer = [0]*len(heights)
+    answer = [0] * len(heights)
     stack = []
 
     for i in reversed(range(len(heights))):
         while stack and stack[-1][1] < heights[i]:
             idx, height = stack.pop()
-            answer[idx] = i+1
+            answer[idx] = i + 1
         stack.append((i, heights[i]))
 
     return answer
