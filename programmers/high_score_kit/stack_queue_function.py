@@ -3,33 +3,33 @@
 
 def solution(progresses, speeds):
     ans = []
-    released = []
-    completed = []
-    n = len(progresses)
 
-    def get_n_sum(n):
-        return ((n + 1) * n) // 2
+    released = 0
 
-    while len(released) < n:
-        for i in range(len(progresses)):
-            if progresses[i] < 100:
-                progresses[i] += speeds[i]
-                if progresses[i] >= 100:
-                    completed.append(i + 1)
-                    n_sum = get_n_sum(max(completed))
+    while progresses:
+        progresses = [p + s for p, s in zip(progresses, speeds)]
+        indices = [i for i, progress in enumerate(progresses) if progress >= 100]
+        release = [index for i, index in enumerate(indices) if index == i]
 
-                    if sum(released) + sum(completed) == n_sum:
-                        ans.append(len(completed))
-                        released.extend(completed)
-                        completed = []
+        if release:
+            progresses = progresses[release[-1] + 1: ]
+            speeds = speeds[release[-1] + 1: ]
+            ans.append(len(release))
 
-            print("===============")
-            print(released)
-            print(completed)
-            print(ans)
-
-    print("---------------------")
     return ans
+
+
+# best solution ever
+def solution2(progresses, speeds):
+    Q=[]
+    for p, s in zip(progresses, speeds):
+        if len(Q)==0 or Q[-1][0]<-((p-100)//s):
+            Q.append([-((p-100)//s),1])
+        else:
+            Q[-1][1]+=1
+
+    print("q", Q)
+    return [q[1] for q in Q]
 
 
 cases = [
@@ -37,6 +37,6 @@ cases = [
         [[40, 93, 30, 55, 60, 65], [60, 1, 30, 5, 10, 7]], # [1, 2, 3]
         [[93, 30, 55, 60, 40, 65], [1, 30, 5, 10, 60, 7]], # [2, 4]
         ]
-for case in cases:
-    progresses, speeds = case
+for progresses, speeds in cases:
     print(solution(progresses, speeds))
+    #print(solution2(progresses, speeds))
