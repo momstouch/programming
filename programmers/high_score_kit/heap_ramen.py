@@ -1,25 +1,47 @@
 # https://programmers.co.kr/learn/courses/30/lessons/42629
-class Node:
-    def __init__(self, take, date, val, skip):
-        self.take = take
-        self.date = date
-        self.val = val
-        self.skip = skip
+import heapq
+
+
+# time over
+def solution_brute(stock, dates, supplies, k):
+    pq = []
+    ans = 0
+    for day in range(k):
+        if dates and dates[0] == day:
+            dates.pop(0)
+            heapq.heappush(pq, -supplies.pop(0))
+
+        if stock == 0:
+            stock = -heapq.heappop(pq)
+            ans += 1
+
+        stock -= 1
+
+    return ans
 
 
 def solution(stock, dates, supplies, k):
-    head = Node(None, stock, None)
-    temp = head
-    now = 0
-    for date, supply in zip(dates, supplies):
-        take_val = stock - (date - now) + supply
-        take = Node(None, date, take_val, None)
-        skip_val = stock - (date - now)
-        skip = Node(None, date, skip_val, None)
-        temp.take = take
-        temp.skip = skip
-        now = date
+    pq = []
+    ans = 0
+    idx = 0
+    # once I use pop() for dates and supplies,
+    # that code couldn't pass on effectiveness test
 
+    while stock < k:
+        for i in range(idx, len(dates)):
+            if stock >= dates[i]:
+                heapq.heappush(pq, -supplies[i])
+                idx += 1
+            else:
+                break
+
+        if not pq:
+            return ans
+
+        stock -= heapq.heappop(pq)
+        ans += 1
+
+    return ans
 
 
 cases = [
