@@ -21,33 +21,62 @@ def solution_timeover3(number, k):
     return perms
 
 
-def solution(number, k):
+def solution_timeover4(number, k):
     target_len = len(number) - k
     number_ = [(n, i) for i, n in enumerate(number)]
     ans = ['0'] * target_len
 
     selected_id = 0
     for i in range(1, target_len + 1):
-        print(selected_id, k + i)
-        if number_[selected_id] == '9':
-            j = selected_id
-            max_val = '9'
-        else:
-            (max_val, j) = sorted(
-                    number_[selected_id: k + i],
-                    key = lambda x: x[0],
-                    reverse = True)[0]
+        (max_val, j) = sorted(
+                number_[selected_id: k + i],
+                key = lambda x: x[0],
+                reverse = True)[0]
         selected_id = j + 1
         ans[i - 1] = max_val
 
     return "".join(ans)
-            
+
+
+def solution_fake(number, k):
+    target_len = len(number) - k
+    ans = ['0'] * target_len
+
+    selected_id = 0
+    for i in range(1, target_len + 1):
+        max_num = '0'
+        for j in range(selected_id, k + i):
+            n = number[j]
+            if max_num < n:
+                max_num = n
+                selected_id = j + 1
+                if max_num == '9':
+                    break
+
+        ans[i - 1] = max_num
+
+    return "".join(ans)
+
+
+def solution(number, k):
+    stack = []
+    n_len = len(number)
+
+    for i, n in enumerate(number, 1):
+        while stack and stack[-1] < n and k > 0:
+            stack.pop()
+            k -= 1
+        stack.append(n)
+
+    # once k is not 0, it has to be removed
+    return "".join(stack[: len(stack) - k])
 
 
 cases = [
         ["1924", 2],        # "94"
         ["1231234", 3],     # "3234"
         ["4177252841", 4],  # "775841"
+        ["100000", 2]
         ]
 for number, k in cases:
     print(solution(number, k))
