@@ -17,12 +17,18 @@ def possibleSums_exceed_time_limit(coins, quantity):
 
 
 def possibleSums(coins, quantity):
-    poss = [] # possibilities
-    for coin, quan in zip(coins, quantity):
-        poss.append([coin * q for q in range(quan + 1)])
+    ans = set([0]) # set for accumulation results
+    for i, coin in enumerate(coins):
+        inner = set()
+        for q in range(0, quantity[i] + 1):
+            for s in ans:
+                # for sum of all possible combinations of coins
+                inner.add(s + coin * q)
 
-    ans = set(map(sum, *product(poss)))
-    print(ans)
+        # union two sets
+        ans = ans | inner
+
+    return len(ans) - 1
 
 
 cases = [
