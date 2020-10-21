@@ -1,13 +1,27 @@
 # https://app.codesignal.com/interview-practice/task/dYCH8sdnxGf5aGkez/description
 
 def decodeString(s):
-    ls = list(s)
-    st = [ls.pop(0)]
-    ans = []
+    def decode(s):
+        ans = ""
 
-    while st:
-        c = st.pop()
+        while s:
+            c = s.pop(0)
 
+            if c.isalpha():
+                ans += c
+            elif c.isdigit():
+                cnt = c
+                while True:
+                    cc = s.pop(0)
+                    if cc == '[': break
+                    cnt += cc
+                ans += decode(s) * int(cnt)
+            else:
+                return ans
+
+        return ans
+
+    return decode(list(s))
 
 
 cases = [
