@@ -19,9 +19,9 @@ def nextLarger(a):
     ans = []
 
     for x in a[::-1]:
-        if stack and x >= stack[-1]:
-            stack.pop()
-        ans.append(stack.pop() if stack else -1)
+        while stack and x >= stack[-1]:
+            stack.pop(-1)
+        ans.append(stack[-1] if stack else -1)
         stack.append(x)
 
     return ans[::-1]
