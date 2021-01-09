@@ -1,20 +1,27 @@
 def route_exists(from_row, from_column, to_row, to_column, map_matrix):
-    mem = [[False] * len(map_matrix[0])] * len(map_matrix)
+    mem = map_matrix.copy()
+
     def run(fr, fc, tr, tc):
-        print(fr, fc)
-        if fr < 0 or fc < 0:
-            return False
-        if fr >= len(map_matrix) or fc >= len(map_matrix[fr]):
-            return False
-        if not map_matrix[fr][fc] or mem[fr][fc]:
-            return False
         if fr == tr and fc == tc:
             return True
 
+        mem[fr][fc] = False
+
+        ret = False
+        if fr-1 >= 0 and mem[fr-1][fc] and map_matrix[fr-1][fc]:
+            ret += run(fr-1, fc, tr, tc)
+        if fc-1 >= 0 and mem[fr][fc-1] and map_matrix[fr][fc-1] and not ret:
+            ret += run(fr, fc-1, tr, tc)
+        if fr+1 < len(map_matrix) and mem[fr+1][fc] and \
+                map_matrix[fr+1][fc] and not ret:
+            ret += run(fr+1, fc, tr, tc)
+        if fc+1 < len(map_matrix[fr]) and mem[fr][fc+1] and \
+                map_matrix[fr][fc+1] and not ret:
+            ret += run(fr, fc+1, tr, tc)
+
         mem[fr][fc] = True
 
-        return run(fr-1,fc,tr,tc) + run(fr+1,fc,tr,tc) +\
-                run(fr,fc-1,tr,tc) + run(fr,fc+1,tr,tc)
+        return True if ret != 0 else False
 
     return run(from_row, from_column, to_row, to_column)
 
@@ -26,4 +33,4 @@ if __name__ == '__main__':
         [False, True, True]
     ];
 
-    print(route_exists(0, 0, 2, 2, map_matrix))
+    assert route_exists(0, 0, 2, 2, map_matrix) == True
