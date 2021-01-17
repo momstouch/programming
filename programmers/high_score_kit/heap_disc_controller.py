@@ -1,32 +1,28 @@
 # https://programmers.co.kr/learn/courses/30/lessons/42627
-import heapq
 
+import heapq
 
 def solution(jobs):
     jobs = sorted(jobs, key=lambda x : x[0], reverse=False)
-    idx = 0
-    pq = []
-    sums = 0
-    end_of_curj = 0
-    size = len(jobs)
+    answer = 0
+    qu = [] # min heap
+    t = 0 # current time
+    i = 0 # index for jobs
 
-    while idx < size or pq:
+    while i < len(jobs) or qu:
+        if not qu and i < len(jobs):
+            t = jobs[i][0]
+        elif qu:
+            length, request = heapq.heappop(qu)
+            answer += t - request + length
+            t += length
 
-        for i in range(idx, size):
-            if end_of_curj >= jobs[i][0]:
-                heapq.heappush(pq, (jobs[i][1], jobs[i][0]))
-                idx += 1
-            else:
-                break
+        while i < len(jobs) and t >= jobs[i][0]:
+            request, length = jobs[i]
+            heapq.heappush(qu, (length, request))
+            i += 1
 
-        if pq:
-            j_length, request = heapq.heappop(pq)
-            sums += end_of_curj - request + j_length
-            end_of_curj += j_length
-        else:
-            end_of_curj = jobs[i][0]
-
-    return sums // size
+    return answer // len(jobs)
 
 
 cases = [
