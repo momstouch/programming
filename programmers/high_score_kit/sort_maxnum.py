@@ -21,18 +21,12 @@ def solution2(numbers):
             )))
 
 
-
 cases = [
-        [6, 10, 2],         # "6210"
-        [3, 30, 34, 5, 9],  # "9534330"
-        [0, 0, 0, 0]
+        ([6, 10, 2], "6210"),
+        ([3, 30, 34, 5, 9], "9534330"),
+        ([0, 0, 0, 0], "0"),
         ]
 t0 = time.time()
-for case in cases:
-    print(solution(case))
-print("running time %.6f" % (time.time() - t0))
-
-t0 = time.time()
-for case in cases:
-    print(solution2(case))
+for numbers, answer in cases:
+    assert solution2(numbers) == answer
 print("running time %.6f" % (time.time() - t0))
