@@ -3,8 +3,8 @@ import re
 
 def solution(files):
     elems = [re.split(r"([0-9]+)", s) for s in files]
-    ans = sorted(elems, key = lambda x: (x[0].lower(), int(x[1])))
-    return ["".join(e for e in elem) for elem in ans]
+    elems.sort(key = lambda x: (x[0].lower(), int(x[1])))
+    return ["".join(e for e in elem) for elem in elems]
 
 
 cases = [
